@@ -42,31 +42,31 @@ export default function TicketsScreen({
   const [newName, setNewName] = useState('');
   const [newDesc, setNewDesc] = useState('');
 
-  // Header: username + logout
+  // Header: logout on the LEFT, username on the RIGHT (optional)
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Tickets',
-      headerRight: () => (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          {!!currentUser?.name && (
-            <Text style={{ color: '#6B7280' }}>{currentUser.name}</Text>
-          )}
-          <Pressable
-            onPress={() => {
-              logout();
-              navigation.replace('Login');
-            }}
-            style={{
-              paddingVertical: 6,
-              paddingHorizontal: 10,
-              backgroundColor: '#EF4444',
-              borderRadius: 8,
-            }}
-          >
-            <Text style={{ color: 'white', fontWeight: '600' }}>Logout</Text>
-          </Pressable>
-        </View>
+      headerLeft: () => (
+        <Pressable
+          onPress={() => {
+            logout();
+            navigation.replace('Login');
+          }}
+          style={{
+            paddingVertical: 6,
+            paddingHorizontal: 10,
+            backgroundColor: '#EF4444',
+            borderRadius: 8,
+            marginLeft: 8,
+          }}
+        >
+          <Text style={{ color: 'white', fontWeight: '600' }}>Logout</Text>
+        </Pressable>
       ),
+      headerRight: () =>
+        currentUser?.name ? (
+          <Text style={{ color: '#6B7280', marginRight: 8 }}>{currentUser.name}</Text>
+        ) : null,
     });
   }, [navigation, currentUser, logout]);
 
@@ -75,8 +75,7 @@ export default function TicketsScreen({
     if (query.trim()) {
       const q = query.toLowerCase();
       list = list.filter(
-        (t) =>
-          t.name.toLowerCase().includes(q) || t.id.toLowerCase().includes(q)
+        (t) => t.name.toLowerCase().includes(q) || t.id.toLowerCase().includes(q)
       );
     }
     if (status !== 'All') list = list.filter((t) => t.status === status);
@@ -92,11 +91,11 @@ export default function TicketsScreen({
 
     try {
       const id = addTicket({
-        id: ticketId,                      // user-entered number
+        id: ticketId,
         name: title,
         description: newDesc.trim() || undefined,
         status: 'Open',
-      } as any); // store sets createdAt/createdBy; cast to satisfy typing if needed
+      } as any); // store sets createdAt/createdBy
 
       setShowCreate(false);
       setNewId('');
@@ -110,28 +109,8 @@ export default function TicketsScreen({
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-      {/* Body Logout button (optional extra, visible in page content) */}
-      <View style={{ paddingHorizontal: 16, paddingTop: 12 }}>
-        <Pressable
-          onPress={() => {
-            logout();
-            navigation.replace('Login');
-          }}
-          style={{
-            backgroundColor: '#EF4444',
-            padding: 10,
-            borderRadius: 8,
-            marginBottom: 8,
-          }}
-        >
-          <Text style={{ color: 'white', textAlign: 'center', fontWeight: '600' }}>
-            Logout
-          </Text>
-        </Pressable>
-      </View>
-
       {/* Search */}
-      <View style={{ paddingHorizontal: 16 }}>
+      <View style={{ paddingHorizontal: 16, paddingTop: 12 }}>
         <View
           style={{
             flexDirection: 'row',

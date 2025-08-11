@@ -14,7 +14,7 @@ export interface Comment {
   createdAt: number;
 }
 export interface Ticket {
-  id: string;               // <-- provided manually
+  id: string;               // provided manually
   name: string;
   description?: string;
   status: Status;
@@ -31,9 +31,7 @@ interface State {
   login: (name: string) => void;
   logout: () => void;
 
-  // NOTE: id must be provided now (manual ticket number)
   addTicket: (t: Omit<Ticket, 'createdAt' | 'createdById' | 'createdByName'>) => string;
-
   updateTicket: (id: string, updates: Partial<Omit<Ticket, 'id' | 'createdAt' | 'createdById' | 'createdByName'>>) => void;
   setStatus: (id: string, status: Status) => void;
   deleteTicket: (id: string) => void;
@@ -46,6 +44,9 @@ function trimOrEmpty(v?: string) {
   return (v ?? '').trim();
 }
 
+// Stable user id derived from username (so re-login with same name keeps same id)
+const makeUserId = (name: string) => `user:${(name || '').trim().toLowerCase()}`;
+
 export const useTicketStore = create<State>()(
   persist(
     (set, get) => ({
@@ -53,11 +54,29 @@ export const useTicketStore = create<State>()(
       tickets: [],
       comments: [],
 
+      // ---- FIXED: stable id + backfill ownership by matching name ----
       login: (name) => {
         const n = trimOrEmpty(name) || 'User';
-        // simple unique user id: name + timestamp (good enough for this demo)
-        set({ currentUser: { id: `${n}-${Date.now()}`, name: n } });
+        const id = makeUserId(n);
+
+        set((state) => {
+          // Backfill: any existing tickets/comments that were authored with this name
+          // get reassigned to this stable id (useful if you created items before this fix).
+          const retagTickets = state.tickets.map((t) =>
+            t.createdByName?.trim() === n ? { ...t, createdById: id, createdByName: n } : t
+          );
+          const retagComments = state.comments.map((c) =>
+            c.userName?.trim() === n ? { ...c, userId: id, userName: n } : c
+          );
+
+          return {
+            currentUser: { id, name: n },
+            tickets: retagTickets,
+            comments: retagComments,
+          };
+        });
       },
+
       logout: () => set({ currentUser: undefined }),
 
       // CREATE — manual ticket number (id)

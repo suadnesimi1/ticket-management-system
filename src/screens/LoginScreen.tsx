@@ -9,12 +9,12 @@ export default function LoginScreen({ navigation }: NativeStackScreenProps<RootS
   const currentUser = useTicketStore((s) => s.currentUser);
   const [name, setName] = useState('');
 
- 
+
   useEffect(() => { if (currentUser) navigation.replace('Tickets'); }, [currentUser]);
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Ticketing</Text>
+      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>Ticket System Management</Text>
       <TextInput
         value={name}
         onChangeText={setName}
