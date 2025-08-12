@@ -1,50 +1,74 @@
 # 📋 Ticket Management App
   
   A simple React Native ticket management application that allows logged-in users to:
+  
   Create tickets (with manual ticket number entry)
+  
   Edit/delete only the tickets they created
+  
   Add and manage comments on tickets (edit/delete own comments only)
+  
   Search, filter, and sort tickets
-  Logout from both header and main screen
+  
+  Log out from both the  header and the main screen
+  
   View ticket details with description and comments
 
 ## ✨ Features
 1. User Authentication
    
-  Login with username (no password for demo purposes)
-  Logout option in header and main screen
+  Log in with username (no password for demo purposes)
+  
+  Logout option inthe  header and the main screen
   
 3. Ticket Management
    
   Manual Ticket Number: User enters own ticket ID (e.g., T-1001)
-  Create Ticket via popup modal form:
+  
+  Create Ticket via pop-up modal form:
+  
   Ticket Number (required)
+  
   Title (required)
+  
   Description (optional)
+  
   Only ticket creator can:
+  
   Edit title, description, and status
+  
   Delete the ticket
+  
   Other users can view but cannot edit/delete tickets they didn’t create
 
 5. Filtering & Sorting
    
   Filter by status: All, Open, In Progress, Closed
+  
   Sort tickets:
+  
   Newest first
+  
   Oldest first
+  
   Search by ticket name or ticket number
   
 5. Ticket Details & Comments
    
   View ticket details: number, title, description, status, creator name, date
+  
   Add comments to tickets
-  Edit/Delete only your own comments
+  
+  Edit/Delete only your comments
   
 7. UI/UX
 
   Clean, consistent, modern design
+  
   Rounded filter chips for status selection
+  
   Floating + button to create new tickets
+  
   Minimal, intuitive modal for ticket creation
 
 ## 🛠 Tech Stack
@@ -93,33 +117,57 @@
 
 Login
 Enter a username and tap Login.
+
 Create Ticket
+
 Tap + button
-Fill in ticket number, title, optional description
+
+Fill in ticket number, title, and  optional description
+
 Tap Create
+
 Edit/Delete Ticket
-Open a ticket you created
+
+Open the ticket you created
+
 Tap Edit or Delete
+
 Comments
+
 Add comments under a ticket
-Edit/Delete only your own comments
+
+Edit/Delete only your comments
+
 Search & Filter
+
 Search bar for ticket name or number
+
 Filter by status
+
 Sort newest/oldest
+
 Logout
-Tap logout button in header or main screen
+
+Tap the  logout button in the header or the main screen
 
 ## 🗂 State Management
+
 The app uses Zustand with persistent storage.
-tickets: all created tickets
+
+Tickets: all created tickets
+
 comments: all comments
+
 currentUser: logged-in user info
 
 ## 🔒 Permissions
+
 Only the ticket creator can edit/delete their ticket
+
 Only the comment creator can edit/delete their comment
 
 ## 📌 Notes
+
 No backend — data is stored locally in AsyncStorage
+
 Clearing storage will reset app data
